@@ -27,7 +27,7 @@ mergeDeep = (List, Properties = {}) -> -- Recursive merge of List
             return (V = true, ...) ->
                 if K == 'value'
                     if T = Transformers.value
-                        T State
+                        T State, ...
 
                     State
                 else

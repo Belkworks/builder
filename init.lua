@@ -62,7 +62,7 @@ return function(DefaultState, Transformers)
             do
               local T = Transformers.value
               if T then
-                T(State)
+                T(State, ...)
               end
             end
             return State

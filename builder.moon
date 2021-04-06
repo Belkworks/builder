@@ -24,18 +24,18 @@ mergeDeep = (List, Properties = {}) -> -- Recursive merge of List
         
         Writer = __builder: true, __state: State
         setmetatable Writer, __index: (K) =>
+            T = Transformers[K]
             if K == 'value'
-                (...) ->
-                    if T = Transformers.value
+                return (...) ->
+                    if T
                         T State, ...
+                    else State
 
-                    State
-            else
-                (V, ...) ->
-                    if T = Transformers[K]
-                        T State, V, ...
-                    else
-                        V or= true
-                        State[K] = V
+            (V, ...) ->
+                if T
+                    T State, V, ...
+                else
+                    V or= true
+                    State[K] = V
 
-                    Writer
+                Writer

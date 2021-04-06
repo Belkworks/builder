@@ -62,7 +62,7 @@ Its return value is the output of the original `.value` call.
 ```lua
 Person = Builder({}, {
     value = function(state, ...)
-        JSON.stringify(state)
+        return JSON.stringify(state)
     end
 })
 

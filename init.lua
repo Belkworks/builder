@@ -54,11 +54,8 @@ return function(DefaultState, Transformers)
     }
     return setmetatable(Writer, {
       __index = function(self, K)
-        return function(V, ...)
-          if V == nil then
-            V = true
-          end
-          if K == 'value' then
+        if K == 'value' then
+          return function(...)
             do
               local T = Transformers.value
               if T then
@@ -66,11 +63,17 @@ return function(DefaultState, Transformers)
               end
             end
             return State
-          else
-            if Transformers[K] then
-              Transformers[K](State, V, ...)
-            else
-              State[K] = V
+          end
+        else
+          return function(V, ...)
+            do
+              local T = Transformers[K]
+              if T then
+                T(State, V, ...)
+              else
+                V = V or true
+                State[K] = V
+              end
             end
             return Writer
           end

@@ -5,7 +5,7 @@ cloneDeep = (List, Explored = {}) -> -- Recursive copy of list
     if 'table' == type List
         return Explored[List] if Explored[List]
         Explored[List] = true
-        Result = {cloneDeep(I), cloneDeep(V) for I, V in pairs List}
+        Result = {cloneDeep(I), cloneDeep V for I, V in pairs List}
         Explored[List] = Result
         Result
     else List
@@ -24,15 +24,18 @@ mergeDeep = (List, Properties = {}) -> -- Recursive merge of List
         
         Writer = __builder: true, __state: State
         setmetatable Writer, __index: (K) =>
-            return (V = true, ...) ->
-                if K == 'value'
+            if K == 'value'
+                (...) ->
                     if T = Transformers.value
                         T State, ...
 
                     State
-                else
-                    if Transformers[K]
-                        Transformers[K] State, V, ...
-                    else State[K] = V
+            else
+                (V, ...) ->
+                    if T = Transformers[K]
+                        T State, V, ...
+                    else
+                        V or= true
+                        State[K] = V
 
                     Writer

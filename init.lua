@@ -32,7 +32,7 @@ mergeDeep = function(List, Properties)
       List[I] = List[I] or { }
       mergeDeep(List[I], V)
     else
-      List[I] = List[I] or V
+      List[I] = V
     end
   end
 end
@@ -50,7 +50,8 @@ return function(DefaultState, Transformers)
     end
     local Writer = {
       __builder = true,
-      __state = State
+      __state = State,
+      __transformers = Transformers
     }
     return setmetatable(Writer, {
       __index = function(self, K)

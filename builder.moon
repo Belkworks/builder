@@ -15,14 +15,14 @@ mergeDeep = (List, Properties = {}) -> -- Recursive merge of List
         if 'table' == type V
             List[I] or= {}
             mergeDeep List[I], V
-        else List[I] or= V
+        else List[I] = V
 
 (DefaultState = {}, Transformers = {}) -> 
     (Merge) ->
         State = cloneDeep DefaultState
         mergeDeep State, Merge if Merge
         
-        Writer = __builder: true, __state: State
+        Writer = __builder: true, __state: State, __transformers: Transformers
         setmetatable Writer, __index: (K) =>
             T = Transformers[K]
             if K == 'value'
